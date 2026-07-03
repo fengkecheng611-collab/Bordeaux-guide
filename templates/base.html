@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}波尔多生活指南{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container">
+            <a href="{{ url_for('index') }}" class="logo">🍷 波尔多生活指南</a>
+            <nav class="site-nav">
+                {% for cat_key, cat_info in categories.items() %}
+                    {% if cat_key != 'xu' %}
+                    <a href="{{ url_for('category', cat_key=cat_key) }}">{{ cat_info.icon }} {{ cat_info.name }}</a>
+                    {% endif %}
+                {% endfor %}
+            </nav>
+            <div class="header-actions">
+                <form class="search-form" action="{{ url_for('search') }}" method="get">
+                    <input type="text" name="q" placeholder="搜索…" value="{{ query|default('') }}">
+                    <button type="submit">🔍</button>
+                </form>
+                <a href="{{ url_for('contribute') }}" class="btn-contribute">✍️ 我要投稿</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash flash-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>波尔多生活指南 · 由学长学姐维护 · <a href="{{ url_for('about') }}">关于我们</a> · <a href="{{ url_for('contribute') }}">我要投稿</a></p>
+            <p class="footer-note">善待自己，学会生活 🍷</p>
+        </div>
+    </footer>
+</body>
+</html>

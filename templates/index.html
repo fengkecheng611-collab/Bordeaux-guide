@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}波尔多生活指南 — 首页{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <h1>🍷 波尔多生活指南</h1>
+        <p class="hero-subtitle">衣食住行玩 · 学长学姐经验版 · 写给每一位来 KEDGE 波尔多的你</p>
+        <p class="hero-cta">有经验想分享？<a href="{{ url_for('contribute') }}">来投稿 ✍️</a> ｜ <a href="{{ url_for('letters') }}">📝 学长寄语</a></p>
+    </div>
+</section>
+
+<section class="photo-strip">
+    <div class="photo-item"><img src="/static/images/santorini-aegean.jpg" alt="圣托里尼与爱琴海" loading="lazy"></div>
+    <div class="photo-item"><img src="/static/images/iceland-golden.jpg" alt="冰岛黄金圈" loading="lazy"></div>
+    <div class="photo-item"><img src="/static/images/swiss-lauterbrunnen.jpg" alt="瑞士劳特布伦嫩" loading="lazy"></div>
+    <div class="photo-item"><img src="/static/images/pyrenees-hike.jpg" alt="比利牛斯山" loading="lazy"></div>
+    <div class="photo-item"><img src="/static/images/iceland-beach.jpg" alt="冰岛黑沙滩" loading="lazy"></div>
+    <div class="photo-item"><img src="/static/images/santorini-panorama.jpg" alt="圣托里尼全景" loading="lazy"></div>
+</section>
+
+{% for cat_key, cat_data in grouped.items() %}
+    {% set cat_info = cat_data.info %}
+    {% set cat_articles = cat_data.articles %}
+    {% if cat_articles %}
+    <section class="category-section cat-{{ cat_key }}">
+        <h2 class="category-title">
+            <a href="{{ url_for('category', cat_key=cat_key) }}">{{ cat_info.icon }} {{ cat_info.name }}</a>
+        </h2>
+        <div class="card-grid">
+            {% for article in cat_articles %}
+            {% set cc = colors.get(article.color, colors['red']) %}
+            <a href="{{ url_for('post', cat_key=cat_key, article_id=article.id) }}" class="card" style="border-left-color: {{ cc.css }}; background: linear-gradient(135deg, {{ cc.light }} 0%, #ffffff 100%);">
+                <h3 class="card-title">{{ article.title }}</h3>
+                <p class="card-excerpt">{{ article.excerpt|truncate(80) }}</p>
+                <div class="card-meta">
+                    <span class="card-author">{{ article.author }}</span>
+                    <span class="card-date">{{ article.date }}</span>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+{% endfor %}
+{% endblock %}

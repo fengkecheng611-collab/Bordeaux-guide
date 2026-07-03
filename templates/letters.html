@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}学长寄语 — 波尔多生活指南{% endblock %}
+
+{% block content %}
+<nav class="breadcrumb">
+    <a href="{{ url_for('index') }}">首页</a> &rsaquo; 学长寄语
+</nav>
+
+<header class="letters-header">
+    <h1>📝 学长寄语</h1>
+    <p class="letters-subtitle">这些文字不是攻略，是一些想对你说的话。它们来自在波尔多生活过的人。</p>
+</header>
+
+<div class="letters-list">
+    {% for article in articles %}
+    <article class="letter">
+        <h2>{{ article.title }}</h2>
+        <div class="post-meta">
+            <span>✍️ {{ article.author }}</span>
+            {% if article.date %}<span>📅 {{ article.date }}</span>{% endif %}
+        </div>
+        <div class="post-content">
+            {{ article.html|safe }}
+        </div>
+        {% if not loop.last %}
+        <hr class="letter-divider">
+        {% endif %}
+    </article>
+    {% endfor %}
+</div>
+
+<div class="letter-cta">
+    <p>你也有想对后来人说的话吗？</p>
+    <a href="{{ url_for('contribute') }}" class="btn-contribute">✍️ 写下你的寄语</a>
+</div>
+{% endblock %}

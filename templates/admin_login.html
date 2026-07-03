@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}管理员登录 — 波尔多生活指南{% endblock %}
+
+{% block content %}
+<div class="admin-login">
+    <h1>🔐 管理员登录</h1>
+    <form method="post" action="{{ url_for('admin_login') }}">
+        <div class="form-group">
+            <label for="password">密码</label>
+            <input type="password" id="password" name="password" required autofocus>
+        </div>
+        <button type="submit" class="btn-submit">登录</button>
+    </form>
+</div>
+{% endblock %}

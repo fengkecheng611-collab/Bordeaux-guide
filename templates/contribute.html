@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}我要投稿 — 波尔多生活指南{% endblock %}
+
+{% block content %}
+<nav class="breadcrumb">
+    <a href="{{ url_for('index') }}">首页</a> &rsaquo; 我要投稿
+</nav>
+
+<h1 class="page-title">✍️ 我要投稿</h1>
+<p class="page-desc">每个人都可以为这份指南添砖加瓦。写一篇像小红书帖子一样的分享就行，不需要长篇大论。</p>
+
+<form class="contribute-form" method="post" action="{{ url_for('contribute') }}" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="title">文章标题 <span class="required">*</span></label>
+        <input type="text" id="title" name="title" placeholder="比如：Auchan超市采购攻略" required maxlength="100">
+    </div>
+
+    <div class="form-group">
+        <label for="category">分类 <span class="required">*</span></label>
+        <select id="category" name="category" required>
+            <option value="">— 请选择分类 —</option>
+            {% for cat_key, cat_info in categories.items() %}
+                {% if cat_key != 'xu' %}
+                <option value="{{ cat_key }}">{{ cat_info.icon }} {{ cat_info.name }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="author">你的名字</label>
+        <input type="text" id="author" name="author" placeholder="比如：23级学长 / 匿名" maxlength="50">
+    </div>
+
+    <div class="form-group">
+        <label for="content">正文内容 <span class="required">*</span></label>
+        <p class="form-hint">支持 Markdown 格式。不知道怎么用也没关系，像平时写字一样写就行。</p>
+        <textarea id="content" name="content" rows="15" placeholder="把你的经验写在这里…&#10;&#10;小提示：&#10;- 用 ## 开头可以写小标题&#10;- 用 - 开头可以列要点&#10;- 空一行就是分段" required></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="image">添加配图（可选）</label>
+        <p class="form-hint">支持 jpg / png / gif / webp，最大 5MB</p>
+        <input type="file" id="image" name="image" accept="image/*">
+    </div>
+
+    <div class="form-group">
+        <label>卡片颜色</label>
+        <p class="form-hint">选择文章卡片的装饰颜色，用于视觉区分</p>
+        <div class="color-picker">
+            {% for color_key, color_info in colors.items() %}
+            <label class="color-option">
+                <input type="radio" name="color" value="{{ color_key }}" {% if loop.first %}checked{% endif %}>
+                <span class="color-swatch" style="background: {{ color_info.css }};" title="{{ color_info.name }}"></span>
+                <span class="color-name">{{ color_info.name }}</span>
+            </label>
+            {% endfor %}
+        </div>
+    </div>
+
+    <button type="submit" class="btn-submit">提交投稿</button>
+</form>
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}管理后台 — 波尔多生活指南{% endblock %}
+
+{% block content %}
+<nav class="breadcrumb">
+    <a href="{{ url_for('index') }}">首页</a> &rsaquo; 管理后台
+    <span style="float:right"><a href="{{ url_for('admin_logout') }}">退出登录</a></span>
+</nav>
+
+<h1 class="page-title">🛠️ 管理后台</h1>
+
+<!-- Pending Submissions -->
+<h2 class="admin-section-title">📋 待审核投稿 ({{ pending|length }})</h2>
+{% if pending %}
+<div class="admin-list">
+    {% for article in pending %}
+    <div class="admin-card">
+        <div class="admin-card-header">
+            <strong>{{ article.title }}</strong>
+            <span class="article-category-badge">{{ article.category }}</span>
+        </div>
+        <div class="admin-card-meta">
+            {{ article.author }} · {{ article.date }}
+        </div>
+        <details class="admin-preview">
+            <summary>预览内容</summary>
+            <div class="post-content">
+                {{ article.html|safe }}
+            </div>
+        </details>
+        <div class="admin-card-actions">
+            <form method="post" style="display:inline">
+                <input type="hidden" name="article_id" value="{{ article.id }}">
+                <input type="hidden" name="action" value="approve">
+                <button type="submit" class="btn-approve">✅ 批准发布</button>
+            </form>
+            <form method="post" style="display:inline" onsubmit="return confirm('确定要删除这篇投稿吗？此操作不可撤销。')">
+                <input type="hidden" name="article_id" value="{{ article.id }}">
+                <input type="hidden" name="action" value="reject">
+                <button type="submit" class="btn-reject">❌ 拒绝</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p class="empty-note">暂无待审核投稿。</p>
+{% endif %}
+
+<hr class="admin-divider">
+
+<!-- Published Articles -->
+<h2 class="admin-section-title">📚 已发布文章 ({{ published|length }})</h2>
+<div class="admin-list">
+    {% for article in published %}
+    <div class="admin-card admin-card-published">
+        <div class="admin-card-header">
+            <strong>{{ article.title }}</strong>
+            <span class="article-category-badge">{{ article.category_name }}</span>
+        </div>
+        <div class="admin-card-meta">
+            {{ article.author }} · {{ article.date }}
+        </div>
+        <div class="admin-card-actions">
+            <a href="{{ url_for('post', cat_key=article.category_key, article_id=article.id) }}" class="btn-small">查看</a>
+            <a href="{{ url_for('edit_article', cat_key=article.category_key, article_id=article.id, edit_key=article.edit_key) }}" class="btn-small">编辑</a>
+            <form method="post" style="display:inline" onsubmit="return confirm('确定要删除这篇文章吗？此操作不可撤销。')">
+                <input type="hidden" name="article_id" value="{{ article.id }}">
+                <input type="hidden" name="cat_key" value="{{ article.category_key }}">
+                <input type="hidden" name="action" value="delete">
+                <button type="submit" class="btn-reject btn-small">删除</button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

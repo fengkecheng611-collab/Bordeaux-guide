@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}搜索{% if query %}: {{ query }}{% endif %} — 波尔多生活指南{% endblock %}
+
+{% block content %}
+<h1 class="page-title">🔍 搜索</h1>
+
+<form class="search-form search-form-large" action="{{ url_for('search') }}" method="get">
+    <input type="text" name="q" placeholder="输入关键词搜索所有文章…" value="{{ query }}" autofocus>
+    <button type="submit">搜索</button>
+</form>
+
+{% if query %}
+    {% if results %}
+    <p class="search-count">找到 {{ results|length }} 篇相关文章</p>
+    <div class="article-list">
+        {% for article in results %}
+        <a href="{{ url_for('post', cat_key=article.category_key, article_id=article.id) }}" class="article-item">
+            <div class="article-item-content">
+                <span class="article-category-badge">{{ article.category_name }}</span>
+                <h3>{{ article.title }}</h3>
+                {% if article.snippet %}
+                <p class="article-snippet">{{ article.snippet }}</p>
+                {% endif %}
+                <span class="article-meta">{{ article.author }}</span>
+            </div>
+            <span class="article-arrow">→</span>
+        </a>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <p>没有找到与"{{ query }}"相关的文章。</p>
+        <p>试试其他关键词？</p>
+    </div>
+    {% endif %}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}投稿成功 — 波尔多生活指南{% endblock %}
+
+{% block content %}
+<nav class="breadcrumb">
+    <a href="{{ url_for('index') }}">首页</a> &rsaquo; 投稿成功
+</nav>
+
+<div class="success-box">
+    <h1>✅ 投稿成功！</h1>
+    <p>你的文章<strong>「{{ title }}」</strong>已提交审核。审核通过后将会出现在网站上。</p>
+
+    <div class="edit-key-box">
+        <h3>🔑 编辑密钥（请务必保存！）</h3>
+        <p>使用此密钥可以随时修改你的投稿：</p>
+        <div class="key-display">
+            <code>{{ edit_key }}</code>
+        </div>
+        <p>编辑链接（建议收藏）：</p>
+        <div class="key-display key-url">
+            <a href="{{ edit_url }}">{{ edit_url }}</a>
+        </div>
+        <p class="key-warning">⚠️ 此密钥不会再次显示，请现在保存好。如果遗失，需要联系管理员。</p>
+    </div>
+
+    <div class="success-actions">
+        <a href="{{ url_for('index') }}" class="btn-submit">返回首页</a>
+        <a href="{{ edit_url }}" class="btn-submit" style="background:#6b5e4a;">立即编辑</a>
+    </div>
+</div>
+{% endblock %}
