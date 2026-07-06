@@ -182,6 +182,12 @@ def get_pending_articles():
 
 # ─── Public Routes ─────────────────────────────────────────────
 
+@app.route('/88188c3ac170041364c210a44b506265.txt')
+def verify():
+    """Site verification endpoint."""
+    return '0007938ed30cc2ffe143628ea13cafaf2297be78', 200, {'Content-Type': 'text/plain'}
+
+
 @app.route('/')
 def index():
     all_articles = get_articles()
